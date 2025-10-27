@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './App.css';
+import WeatherCard from './components/WeatherCard';
+import ForecastCard from './components/ForecastCard';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8080';
 
@@ -126,115 +128,18 @@ function App() {
 
           {weatherData && (
             <div className="weather-container">
-              {/* Main Weather Card */}
-              <div className="weather-card main-weather">
-                <div className="weather-header">
-                  <div className="location-info">
-                    <h2 className="city-name">
-                      {weatherData.city.charAt(0).toUpperCase() + weatherData.city.slice(1)}
-                    </h2>
-                    <div className="weather-meta">
-                      <span className="condition-text">
-                        {weatherData.condition.charAt(0).toUpperCase() + weatherData.condition.slice(1)}
-                      </span>
-                      {weatherData.cached && (
-                        <span className="cache-badge">📦 Cached</span>
-                      )}
-                    </div>
-                  </div>
-                  <button 
-                    className="temp-toggle"
-                    onClick={toggleTemperature}
-                    title={`Switch to ${isCelsius ? 'Fahrenheit' : 'Celsius'}`}
-                  >
-                    {isCelsius ? '°C' : '°F'}
-                  </button>
-                </div>
-                
-                <div className="weather-main">
-                  <div className="temperature-section">
-                    <div className="weather-icon">
-                      <img 
-                        src={`https://openweathermap.org/img/wn/${weatherData.icon}@2x.png`}
-                        alt={weatherData.condition}
-                      />
-                    </div>
-                    <div className="temperature">
-                      {convertTemperature(weatherData.temperature)}
-                      <span className="temp-unit">{getTemperatureUnit()}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Additional Weather Details */}
-                <div className="weather-details">
-                  <div className="detail-item">
-                    <div className="detail-icon">💧</div>
-                    <div className="detail-content">
-                      <span className="detail-value">{weatherData.humidity}%</span>
-                      <span className="detail-label">Humidity</span>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <div className="detail-icon">💨</div>
-                    <div className="detail-content">
-                      <span className="detail-value">{weatherData.windSpeed} m/s</span>
-                      <span className="detail-label">Wind Speed</span>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <div className="detail-icon">🔽</div>
-                    <div className="detail-content">
-                      <span className="detail-value">{weatherData.pressure} hPa</span>
-                      <span className="detail-label">Pressure</span>
-                    </div>
-                  </div>
-                  <div className="detail-item">
-                    <div className="detail-icon">👁️</div>
-                    <div className="detail-content">
-                      <span className="detail-value">{Math.round(weatherData.visibility / 1000)} km</span>
-                      <span className="detail-label">Visibility</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="weather-footer">
-                  <small className="last-updated">
-                    Last updated: {new Date(weatherData.timestamp).toLocaleString()}
-                  </small>
-                </div>
-              </div>
-
-              {/* 5-Day Forecast */}
-              {weatherData.forecast && (
-                <div className="forecast-section">
-                  <h3 className="forecast-title">5-Day Forecast</h3>
-                  <div className="forecast-container">
-                    {weatherData.forecast.map((day, index) => (
-                      <div key={index} className="forecast-card">
-                        <div className="forecast-day">{day.dayName}</div>
-                        <div className="forecast-icon">
-                          <img 
-                            src={`https://openweathermap.org/img/wn/${day.icon}@2x.png`}
-                            alt={day.condition}
-                          />
-                        </div>
-                        <div className="forecast-temps">
-                          <span className="forecast-max">
-                            {convertTemperature(day.maxTemp)}°
-                          </span>
-                          <span className="forecast-min">
-                            {convertTemperature(day.minTemp)}°
-                          </span>
-                        </div>
-                        <div className="forecast-condition">
-                          {day.condition.charAt(0).toUpperCase() + day.condition.slice(1)}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+              <WeatherCard 
+                weatherData={weatherData}
+                isCelsius={isCelsius}
+                onToggleTemperature={toggleTemperature}
+                convertTemperature={convertTemperature}
+                getTemperatureUnit={getTemperatureUnit}
+              />
+              
+              <ForecastCard 
+                forecast={weatherData.forecast}
+                convertTemperature={convertTemperature}
+              />
             </div>
           )}
 
