@@ -282,11 +282,62 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  position: relative;
 }
 
 .temp-toggle:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: scale(1.05);
+}
+
+/* Custom Tooltip */
+.temp-toggle::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.9);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.temp-toggle::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(100%);
+  border: 5px solid transparent;
+  border-top-color: rgba(0, 0, 0, 0.9);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 1000;
+  pointer-events: none;
+}
+
+.temp-toggle:hover::before,
+.temp-toggle:hover::after {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+.temp-toggle:hover::after {
+  transform: translateX(-50%) translateY(100%);
 }
 
 /* Weather Main */
@@ -535,6 +586,11 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+  /* Hide tooltips on mobile for better UX */
+  .temp-toggle::before,
+  .temp-toggle::after {
+    display: none;
+  }
   .app-title {
     font-size: 2.5rem;
     flex-direction: column;

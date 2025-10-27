@@ -20,7 +20,7 @@ const WeatherCard = ({ weatherData, isCelsius, onToggleTemperature, convertTempe
         <button 
           className="temp-toggle"
           onClick={onToggleTemperature}
-          title={`Switch to ${isCelsius ? 'Fahrenheit' : 'Celsius'}`}
+          data-tooltip={`Switch to ${isCelsius ? 'Fahrenheit' : 'Celsius'}`}
         >
           {isCelsius ? '°C' : '°F'}
         </button>
